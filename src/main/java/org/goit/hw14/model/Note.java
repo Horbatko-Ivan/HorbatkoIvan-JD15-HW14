@@ -1,4 +1,4 @@
-package org.goit.model;
+package org.goit.hw14.model;
 
 import lombok.Getter;
 
