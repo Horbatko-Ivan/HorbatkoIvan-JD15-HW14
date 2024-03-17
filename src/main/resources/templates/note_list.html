@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Note List</title>
+  <link href="/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-3">
+  <h1>Notes</h1>
+  <div class="mb-3">
+    <a th:href="@{/note/edit}" class="btn btn-primary">Create New Note</a>
+  </div>
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">Title</th>
+      <th scope="col">Content</th>
+      <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="note : ${notes}">
+      <td th:text="${note.title}">Title</td>
+      <td th:text="${note.content}">Content</td>
+      <td>
+        <a th:href="@{/note/edit(id=${note.id})}" class="btn btn-success btn-sm">Edit</a>
+        <a th:href="@{/note/delete(id=${note.id})}" class="btn btn-danger btn-sm"
+           onclick="return confirm('Are you sure?')">Delete</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

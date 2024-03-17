@@ -1,10 +1,10 @@
-package org.goit.service;
+package org.goit.hw15.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.goit.model.Note;
+import org.goit.hw15.model.Note;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings("checkstyle:MissingJavadocType")

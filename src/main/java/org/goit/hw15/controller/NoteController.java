@@ -1,0 +1,66 @@
+package org.goit.hw15.controller;
+
+import org.goit.hw15.model.Note;
+import org.goit.hw15.service.NoteService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@SuppressWarnings("checkstyle:MissingJavadocType")
+@Controller
+public class NoteController {
+
+  private final NoteService noteService;
+  private static final Logger logger = LoggerFactory.getLogger(NoteController.class);
+
+  @Autowired
+  public NoteController(NoteService noteService) {
+    this.noteService = noteService;
+  }
+
+  @SuppressWarnings("checkstyle:MissingJavadocMethod")
+  @GetMapping("/note/list")
+  public String listNotes(Model model) {
+    logger.info("Accessing note list page.");
+    model.addAttribute("notes", noteService.listAll());
+    return "note_list";
+  }
+
+  @SuppressWarnings("checkstyle:MissingJavadocMethod")
+  @PostMapping("/note/delete")
+  public String deleteNote(@RequestParam Long id) {
+    logger.info("Accessing note delete page.");
+    noteService.deleteById(id);
+    return "redirect:/note/list";
+  }
+
+  @SuppressWarnings("checkstyle:MissingJavadocMethod")
+  @GetMapping("/note/edit")
+  public String editNoteForm(@RequestParam(required = false) Long id, Model model) {
+    logger.info("Accessing noteEditForm page.");
+    if (id != null) {
+      Note note = noteService.getById(id);
+      model.addAttribute("note", note);
+    } else {
+      model.addAttribute("note", new Note());
+    }
+    return "note_edit";
+  }
+
+  @SuppressWarnings("checkstyle:MissingJavadocMethod")
+  @PostMapping("/note/edit")
+  public String editNote(Note note) {
+    logger.info("Accessing note edit page.");
+    if (note.getId() != null) {
+      noteService.update(note);
+    } else {
+      noteService.add(note);
+    }
+    return "redirect:/note/list";
+  }
+}
