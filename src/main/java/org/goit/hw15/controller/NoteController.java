@@ -9,14 +9,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @SuppressWarnings("checkstyle:MissingJavadocType")
 @Controller
+@RequestMapping("/note")
 public class NoteController {
 
-  private final NoteService noteService;
   private static final Logger logger = LoggerFactory.getLogger(NoteController.class);
+  private final NoteService noteService;
 
   @Autowired
   public NoteController(NoteService noteService) {
@@ -24,7 +26,7 @@ public class NoteController {
   }
 
   @SuppressWarnings("checkstyle:MissingJavadocMethod")
-  @GetMapping("/note/list")
+  @GetMapping("/list")
   public String listNotes(Model model) {
     logger.info("Accessing note list page.");
     model.addAttribute("notes", noteService.listAll());
@@ -32,15 +34,15 @@ public class NoteController {
   }
 
   @SuppressWarnings("checkstyle:MissingJavadocMethod")
-  @PostMapping("/note/delete")
+  @PostMapping("/delete")
   public String deleteNote(@RequestParam Long id) {
-    logger.info("Accessing note delete page.");
+    logger.info("Deleting note with id: {}", id);
     noteService.deleteById(id);
     return "redirect:/note/list";
   }
 
   @SuppressWarnings("checkstyle:MissingJavadocMethod")
-  @GetMapping("/note/edit")
+  @GetMapping("/edit")
   public String editNoteForm(@RequestParam(required = false) Long id, Model model) {
     logger.info("Accessing noteEditForm page.");
     if (id != null) {
@@ -53,9 +55,9 @@ public class NoteController {
   }
 
   @SuppressWarnings("checkstyle:MissingJavadocMethod")
-  @PostMapping("/note/edit")
+  @PostMapping("/edit")
   public String editNote(Note note) {
-    logger.info("Accessing note edit page.");
+    logger.info("Processing note edit.");
     if (note.getId() != null) {
       noteService.update(note);
     } else {

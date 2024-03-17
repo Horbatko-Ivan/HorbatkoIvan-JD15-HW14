@@ -1,54 +1,66 @@
 package org.goit.hw15.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 import org.goit.hw15.model.Note;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings("checkstyle:MissingJavadocType")
 @Service
 public class NoteService {
 
-  public static final String NOTE_WITH_ID = "Note with id ";
-  public static final String NOT_FOUND = " not found";
-  private final Map<Long, Note> notes = new HashMap<>();
-  private long currentId = 1;
+  public static final String NOTE_WITH_ID = "Note with id {} not found";
+  private static final Logger logger = LoggerFactory.getLogger(NoteService.class);
+  private final ConcurrentHashMap<Long, Note> notes = new ConcurrentHashMap<>();
+  private final AtomicLong currentId = new AtomicLong(1);
 
   public List<Note> listAll() {
+    logger.info("Listing all notes");
     return new ArrayList<>(notes.values());
   }
 
   @SuppressWarnings("checkstyle:MissingJavadocMethod")
   public Note add(Note note) {
-    note.setId(currentId++);
-    notes.put(note.getId(), note);
+    long id = currentId.getAndIncrement();
+    note.setId(id);
+    notes.put(id, note);
+    logger.info("Added note with id {}", id);
     return note;
   }
 
   @SuppressWarnings("checkstyle:MissingJavadocMethod")
   public void deleteById(long id) {
-    if (!notes.containsKey(id)) {
-      throw new IllegalArgumentException(NOTE_WITH_ID + id + NOT_FOUND);
+    if (notes.remove(id) == null) {
+      logger.error(NOTE_WITH_ID, id);
+      throw new IllegalArgumentException(String.format(NOTE_WITH_ID, id));
+    } else {
+      logger.info("Deleted note with id {}", id);
     }
-    notes.remove(id);
   }
 
   @SuppressWarnings("checkstyle:MissingJavadocMethod")
   public void update(Note note) {
-    if (!notes.containsKey(note.getId())) {
-      throw new IllegalArgumentException(NOTE_WITH_ID + note.getId() + NOT_FOUND);
+    if (note.getId() == null || notes.replace(note.getId(), note) == null) {
+      logger.error(NOTE_WITH_ID, note.getId());
+      throw new IllegalArgumentException(String.format(NOTE_WITH_ID, note.getId()));
+    } else {
+      logger.info("Updated note with id {}", note.getId());
     }
-    notes.put(note.getId(), note);
   }
 
   @SuppressWarnings("checkstyle:MissingJavadocMethod")
   public Note getById(long id) {
     Note note = notes.get(id);
     if (note == null) {
-      throw new IllegalArgumentException(NOTE_WITH_ID + id + NOT_FOUND);
+      logger.error(NOTE_WITH_ID, id);
+      throw new IllegalArgumentException(String.format(NOTE_WITH_ID, id));
+    } else {
+      logger.info("Retrieved note with id {}", id);
+      return note;
     }
-    return note;
   }
 }

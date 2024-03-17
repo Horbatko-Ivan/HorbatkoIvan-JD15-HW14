@@ -6,19 +6,19 @@
 </head>
 <body>
 <div class="container mt-3">
-  <h1>Edit Note</h1>
+  <h1 th:text="${note.id != null ? 'Edit Note' : 'Create Note'}"></h1>
   <form th:action="@{/note/edit}" th:object="${note}" method="post">
+    <input type="hidden" th:field="*{id}"/>
     <div class="mb-3">
-      <label for="noteTitle" class="form-label">Title</label>
-      <input type="text" class="form-control" id="noteTitle" th:field="*{title}"
-             placeholder="Enter title">
+      <label for="title" class="form-label">Title</label>
+      <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="Title">
     </div>
     <div class="mb-3">
-      <label for="noteContent" class="form-label">Content</label>
-      <textarea class="form-control" id="noteContent" th:field="*{content}" rows="3"
-                placeholder="Enter content"></textarea>
+      <label for="content" class="form-label">Content</label>
+      <textarea id="content" th:field="*{content}" class="form-control" rows="3"
+                placeholder="Content"></textarea>
     </div>
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <button type="submit" class="btn btn-primary">Save</button>
   </form>
 </div>
 <script src="/js/bootstrap.bundle.min.js"></script>
