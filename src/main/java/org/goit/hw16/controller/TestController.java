@@ -1,4 +1,4 @@
-package org.goit.hw15.controller;
+package org.goit.hw16.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

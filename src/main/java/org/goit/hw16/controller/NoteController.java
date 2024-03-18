@@ -1,7 +1,7 @@
-package org.goit.hw15.controller;
+package org.goit.hw16.controller;
 
-import org.goit.hw15.model.Note;
-import org.goit.hw15.service.NoteService;
+import org.goit.hw16.model.Note;
+import org.goit.hw16.service.NoteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +46,7 @@ public class NoteController {
   public String editNoteForm(@RequestParam(required = false) Long id, Model model) {
     logger.info("Accessing noteEditForm page.");
     if (id != null) {
-      Note note = noteService.getById(id);
-      model.addAttribute("note", note);
+      noteService.getById(id).ifPresent(note -> model.addAttribute("note", note));
     } else {
       model.addAttribute("note", new Note());
     }
