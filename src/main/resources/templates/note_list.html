@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="UA">
 <head>
   <title>Note List</title>
   <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -8,7 +8,7 @@
 <div class="container mt-3">
   <h1>Notes</h1>
   <div class="mb-3">
-    <a th:href="@{/note/edit}" class="btn btn-primary">Create New Note</a>
+    <a class="btn btn-primary" th:href="@{/note/edit}">Create New Note</a>
   </div>
   <table class="table">
     <thead>
@@ -23,11 +23,11 @@
       <td th:text="${note.title}">Title</td>
       <td th:text="${note.content}">Content</td>
       <td>
-        <a th:href="@{/note/edit(id=${note.id})}" class="btn btn-success btn-sm">Edit</a>
-        <form th:action="@{/note/delete}" method="post" style="display:inline;">
-          <input type="hidden" name="id" th:value="${note.id}"/>
-          <button type="submit" class="btn btn-danger btn-sm"
-                  onclick="return confirm('Are you sure?')">Delete
+        <a class="btn btn-success btn-sm" th:href="@{/note/edit(id=${note.id})}">Edit</a>
+        <form method="post" style="display:inline;" th:action="@{/note/delete}">
+          <input name="id" th:value="${note.id}" type="hidden"/>
+          <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')"
+                  type="submit">Delete
           </button>
         </form>
       </td>
